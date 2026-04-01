@@ -1,11 +1,12 @@
 
+using JobHandlerAPI.Data;
+using JobHandlerAPI.Models;
+using JobHandlerAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using JobHandlerAPI.Data;
-using JobHandlerAPI.Services;
 using System.Text;
-using JobHandlerAPI.Models;
 
 namespace JobHandlerAPI
 {
@@ -16,12 +17,30 @@ namespace JobHandlerAPI
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddIdentity<ApplicationUser,
+                      IdentityRole>(options =>
+                      {
+                          // Password requirements
+                          options.Password.RequireDigit = true;
+                          options.Password.RequireLowercase = true;
+                          options.Password.RequireUppercase = true;
+                          options.Password.RequireNonAlphanumeric = true;
+                          options.Password.RequiredLength = 8;
 
+                          // Lockout settings
+                          options.Lockout.DefaultLockoutTimeSpan =
+                              TimeSpan.FromMinutes(5);
+                          options.Lockout.MaxFailedAccessAttempts = 5;
+
+                          // User settings
+                          options.User.RequireUniqueEmail = true;
+                      })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
 
             builder.Services.AddControllers();
-            builder.Services.AddScoped<User>();
-            builder.Services.AddScoped<Comment>();
-            builder.Services.AddScoped<Post>();
+            builder.Services.AddScoped<CommentService>();
+            builder.Services.AddScoped<PostService>();
 
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

@@ -3,7 +3,7 @@
     public class Post
     {
         public Guid Id = Guid.NewGuid();
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
 
         public string Title { get; set; }
         public string CompanyName { get; set; }

@@ -6,7 +6,7 @@ namespace JobHandlerAPI.Models
     {
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
 
         public Guid PostId { get; set; }
 
@@ -15,7 +15,7 @@ namespace JobHandlerAPI.Models
 
         public DateTime UpdatedDate { get; set; } = DateTime.UtcNow;
 
-        public User User { get; set; }
+        public ApplicationUser User { get; set; }
 
         public Post Post { get; set; }
 
