@@ -2,7 +2,7 @@
 {
     public class Post
     {
-        public Guid Id = Guid.NewGuid();
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string UserId { get; set; }
 
         public string Title { get; set; }
