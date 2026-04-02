@@ -1,15 +1,42 @@
 ﻿using JobHandlerAPI.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobHandlerAPI.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext :
+    IdentityDbContext<ApplicationUser>
     {
-        public DbSet<User> Users => Set<User>();
-        public DbSet<Post> Posts  => Set<Post>();
+        public AppDbContext(
+        DbContextOptions<AppDbContext> options)
+        : base(options)
+        { }
+        public DbSet<Post> Posts => Set<Post>();
         public DbSet<Comment> Comments => Set<Comment>();
 
+        protected override void OnModelCreating(
+        ModelBuilder builder)
+        {
+            base.OnModelCreating(builder); // Important!
 
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+            // Seed roles
+            builder.Entity<IdentityRole>().HasData(
+                new IdentityRole
+                {
+                    Id = "1",
+                    Name = "Admin",
+                    NormalizedName = "ADMIN",
+                    ConcurrencyStamp = "1"
+                },
+                new IdentityRole
+                {
+                    Id = "2",
+                    Name = "User",
+                    NormalizedName = "USER",
+                    ConcurrencyStamp = "2"
+                }
+            );
+        }
     }
 }
