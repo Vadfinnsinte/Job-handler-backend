@@ -26,13 +26,15 @@ namespace JobHandlerAPI.Data
                 {
                     Id = "1",
                     Name = "Admin",
-                    NormalizedName = "ADMIN"
+                    NormalizedName = "ADMIN",
+                    ConcurrencyStamp = "1"
                 },
                 new IdentityRole
                 {
                     Id = "2",
                     Name = "User",
-                    NormalizedName = "USER"
+                    NormalizedName = "USER",
+                    ConcurrencyStamp = "2"
                 }
             );
         }

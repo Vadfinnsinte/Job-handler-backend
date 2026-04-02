@@ -7,6 +7,6 @@ namespace JobHandlerAPI.Models
 
         public bool EmploymentStatus { get; set; } = false;
 
-        public DateTime Created { get; set; } = DateTime.UtcNow;
+        public DateTime Created { get; set; } 
     }
 }
