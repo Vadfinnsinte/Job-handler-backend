@@ -4,6 +4,7 @@ using JobHandlerAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobHandlerAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260402102845_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,7 +104,7 @@ namespace JobHandlerAPI.Migrations
                         {
                             Id = "u1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9859207d-9062-4022-a1fe-bf38de9b8888",
+                            ConcurrencyStamp = "9859207d-9062-4022-a1fe-bf38de9b0228",
                             Created = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Utc),
                             Email = "admin@test.com",
                             EmailConfirmed = true,
@@ -112,47 +115,9 @@ namespace JobHandlerAPI.Migrations
                             NormalizedUserName = "ADMIN@TEST.COM",
                             PasswordHash = "AQAAAAIAAYagAAAAEC7G//5lR9tL3LqUr/GKrFYgxc6L5GKz87BvdCzb07dQLNkCgtwkGbHefQGihmQD5w==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "0334c1a6-afb3-4f2d-b8cd-352667da8222",
+                            SecurityStamp = "0334c1a6-afb3-4f2d-b8cd-352667da8f32",
                             TwoFactorEnabled = false,
                             UserName = "admin@test.com"
-                        },
-                        new
-                        {
-                            Id = "u2",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "9859207d-9062-4022-a1fe-bf38de9b0000",
-                            Created = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            Email = "user1@test.com",
-                            EmailConfirmed = true,
-                            EmploymentStatus = false,
-                            LockoutEnabled = false,
-                            Name = "User One",
-                            NormalizedEmail = "USER1@TEST.COM",
-                            NormalizedUserName = "USER1@TEST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEC7G//5lR9tL3LqUr/GKrFYgxc6L5GKz87BvdCzb07dQLNkCgtwkGbHefQGihmQD5w==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "0334c1a6-afb3-4f2d-b8cd-352667da8000",
-                            TwoFactorEnabled = false,
-                            UserName = "user1@test.com"
-                        },
-                        new
-                        {
-                            Id = "u3",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "9859207d-9062-4022-a1fe-bf38de9b0195",
-                            Created = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            Email = "user2@test.com",
-                            EmailConfirmed = true,
-                            EmploymentStatus = false,
-                            LockoutEnabled = false,
-                            Name = "User Two",
-                            NormalizedEmail = "USER2@TEST.COM",
-                            NormalizedUserName = "USER2@TEST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEC7G//5lR9tL3LqUr/GKrFYgxc6L5GKz87BvdCzb07dQLNkCgtwkGbHefQGihmQD5w==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "0334c1a6-afb3-4f2d-b8cd-352667da8221",
-                            TwoFactorEnabled = false,
-                            UserName = "user2@test.com"
                         });
                 });
 
@@ -244,71 +209,6 @@ namespace JobHandlerAPI.Migrations
                             Title = "Backend Developer",
                             Updated = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Utc),
                             UserId = "u1"
-                        },
-                        new
-                        {
-                            Id = new Guid("11111111-1111-1111-1111-111111111112"),
-                            AdText = "Another job ad",
-                            ApplicationDate = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            CompanyName = "Company B",
-                            Created = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            Link = "https://example.com/job2",
-                            Status = "Pending",
-                            Title = "Fullstack Developer",
-                            Updated = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            UserId = "u1"
-                        },
-                        new
-                        {
-                            Id = new Guid("22222222-2222-2222-2222-222222222221"),
-                            AdText = "Frontend job",
-                            ApplicationDate = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            CompanyName = "Company C",
-                            Created = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            Link = "https://example.com/job3",
-                            Status = "Applied",
-                            Title = "Frontend Developer",
-                            Updated = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            UserId = "u2"
-                        },
-                        new
-                        {
-                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            AdText = "React job",
-                            ApplicationDate = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            CompanyName = "Company D",
-                            Created = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            Link = "https://example.com/job4",
-                            Status = "Rejected",
-                            Title = "React Developer",
-                            Updated = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            UserId = "u2"
-                        },
-                        new
-                        {
-                            Id = new Guid("33333333-3333-3333-3333-333333333331"),
-                            AdText = "DevOps job",
-                            ApplicationDate = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            CompanyName = "Company E",
-                            Created = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            Link = "https://example.com/job5",
-                            Status = "Pending",
-                            Title = "DevOps Engineer",
-                            Updated = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            UserId = "u3"
-                        },
-                        new
-                        {
-                            Id = new Guid("33333333-3333-3333-3333-333333333332"),
-                            AdText = "Cloud job",
-                            ApplicationDate = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            CompanyName = "Company F",
-                            Created = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            Link = "https://example.com/job6",
-                            Status = "Applied",
-                            Title = "Cloud Engineer",
-                            Updated = new DateTime(2024, 4, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            UserId = "u3"
                         });
                 });
 
@@ -446,16 +346,6 @@ namespace JobHandlerAPI.Migrations
                         {
                             UserId = "u1",
                             RoleId = "1"
-                        },
-                        new
-                        {
-                            UserId = "u2",
-                            RoleId = "2"
-                        },
-                        new
-                        {
-                            UserId = "u3",
-                            RoleId = "2"
                         });
                 });
 
