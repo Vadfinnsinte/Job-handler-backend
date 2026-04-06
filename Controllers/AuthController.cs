@@ -1,5 +1,7 @@
 ﻿using JobHandlerAPI.DTOs;
+using JobHandlerAPI.Helpers;
 using JobHandlerAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -30,22 +32,31 @@ namespace JobHandlerAPI.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto dto)
         {
-            var user = new ApplicationUser
-            {
-                UserName = dto.Email,
-                Email = dto.Email,
-                Name = dto.Name
-            };
-
-            var result = await _userMgr.CreateAsync(user, dto.Password);
-
-            if (!result.Succeeded)
-                return BadRequest(result.Errors);
+            var userResult = await CreateUser(dto, allowExisting: false);
+            if (!userResult.IsSuccess)
+                return BadRequest(userResult.Errors);
 
             // Assign default role
-            await _userMgr.AddToRoleAsync(user, "User");
+            await _userMgr.AddToRoleAsync(userResult.Data, "User");
 
-            return Ok("User registered successfully");
+            return Ok(new { message = "User registered successfully" });
+        }
+
+        [HttpPost("create-admin")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> CreateAdmin(RegisterDto dto)
+        {
+            var userResult = await CreateUser(dto, allowExisting: true);
+            if (!userResult.IsSuccess)
+                return BadRequest(userResult.Errors);
+
+            var user = userResult.Data;
+
+  
+            if (!await _userMgr.IsInRoleAsync(user, "Admin"))
+                await _userMgr.AddToRoleAsync(user, "Admin");
+
+            return Ok(new { message = "User is now an admin" });
         }
 
         [HttpPost("login")]
@@ -98,5 +109,42 @@ namespace JobHandlerAPI.Controllers
                 }
             });
         }
+
+        private async Task<Result<ApplicationUser>> CreateUser(RegisterDto dto, bool allowExisting)
+        {
+      
+            var user = await _userMgr.FindByEmailAsync(dto.Email);
+
+            if (user != null)
+            {
+                if (!allowExisting)
+                    return Result<ApplicationUser>.Failure("Email already exists");
+
+                return Result<ApplicationUser>.Success(user);
+            }
+
+       
+            var existingUsername = await _userMgr.FindByNameAsync(dto.Username);
+            if (existingUsername != null)
+                return Result<ApplicationUser>.Failure("Username already exists");
+
+    
+            user = new ApplicationUser
+            {
+                UserName = dto.Username,
+                Email = dto.Email,
+                Name = dto.Name
+            };
+
+            var result = await _userMgr.CreateAsync(user, dto.Password);
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description);
+                return Result<ApplicationUser>.Failure(errors);
+            }
+
+            return Result<ApplicationUser>.Success(user);
+        
     }
+}
 }
