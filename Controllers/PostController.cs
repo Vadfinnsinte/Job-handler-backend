@@ -18,11 +18,24 @@ namespace JobHandlerAPI.Controllers
             _postService = postService;
         }
 
-        //GET-endpoint to retrieve all posts, accessible to everyone
+        //GET-endpoint, only admins can see all posts in the system
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetPosts()
         {
             var posts = await _postService.GetAllPosts();
+            return Ok(posts);
+        }
+
+        // Returns only the posts created by the logged-in user
+        [HttpGet("my-posts")]
+        [Authorize]
+        public async Task<IActionResult> GetMyPosts()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var posts = await _postService.GetPostsByUser(userId);
+
             return Ok(posts);
         }
 
@@ -52,14 +65,29 @@ namespace JobHandlerAPI.Controllers
         }
 
         //DELETE-endpoint to delete a post by its ID, accessible only to users with the "Admin" role
-        [HttpDelete("{id}")]
+        [HttpDelete("admin/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeletePost(Guid id)
+        public async Task<IActionResult> DeletePostAdmin(Guid id)
         {
-            var deleted = await _postService.DeletePost(id);
+            var deleted = await _postService.DeletePostAdmin(id);
 
             if (!deleted)
                 return NotFound();
+
+            return NoContent();
+        }
+
+        //DELETE-endpoint, users can delete their own posts
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteOwnPost(Guid id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var deleted = await _postService.DeleteOwnPost(id, userId);
+
+            if (!deleted)
+                return Forbid();
 
             return NoContent();
         }

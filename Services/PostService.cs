@@ -39,6 +39,14 @@ namespace JobHandlerAPI.Services
             return await _context.Posts.FindAsync(id);
         }
 
+        // Returns all posts created by a specific user
+        public async Task<List<Post>> GetPostsByUser(string userId)
+        {
+            return await _context.Posts
+                .Where(p => p.UserId == userId)
+                .ToListAsync();
+        }
+
         // Creates a new post in the database.
         // The userId is retrieved from the JWT token in the controller.
         public async Task<Post> CreatePost(CreatePostDto dto, string userId)
@@ -90,8 +98,8 @@ namespace JobHandlerAPI.Services
             return true;
         }
 
-        // Deletes a post from the database.
-        public async Task<bool> DeletePost(Guid id)
+        // Admin deletes any post
+        public async Task<bool> DeletePostAdmin(Guid id)
         {
             var post = await _context.Posts.FindAsync(id);
 
@@ -99,10 +107,28 @@ namespace JobHandlerAPI.Services
                 return false;
 
             _context.Posts.Remove(post);
-
             await _context.SaveChangesAsync();
 
             return true;
         }
+
+        // User deletes their own post
+        public async Task<bool> DeleteOwnPost(Guid id, string userId)
+        {
+            var post = await _context.Posts.FindAsync(id);
+
+            if (post == null)
+                return false;
+
+            if (post.UserId != userId)
+                return false;
+
+            _context.Posts.Remove(post);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+
     }
 }
