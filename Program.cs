@@ -41,6 +41,7 @@ namespace JobHandlerAPI
             builder.Services.AddControllers();
             builder.Services.AddScoped<CommentService>();
             builder.Services.AddScoped<PostService>();
+            builder.Services.AddScoped<UserService>();
 
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
