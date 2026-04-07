@@ -1,10 +1,11 @@
 ﻿using JobHandlerAPI.DTOs.Comment;
 using JobHandlerAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobHandlerAPI.Controllers
 {
-    [Route("api/comments")]
+    [Route("api/[controller]")]
     [ApiController]
     public class CommentController : ControllerBase
     {
@@ -16,6 +17,7 @@ namespace JobHandlerAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllComments()
         {
             var result = await _commentService.GetAllCommentsAsync();
@@ -26,18 +28,9 @@ namespace JobHandlerAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetCommentById(Guid id)
-        {
-            var result = await _commentService.GetCommentByIdAsync(id);
 
-            if (!result.IsSuccess)
-                return NotFound(result);
-
-            return Ok(result);
-        }
-
-        [HttpGet("post/{postId}")]
+        [HttpGet("{postId}")]
+        [Authorize]
         public async Task<IActionResult> GetCommentsByPostId(Guid postId)
         {
             var result = await _commentService.GetCommentsByPostIdAsync(postId);
@@ -49,6 +42,7 @@ namespace JobHandlerAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateComment(CommentCreateDto dto)
         {
             var result = await _commentService.CreateCommentAsync(dto);
@@ -60,6 +54,7 @@ namespace JobHandlerAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateComment(Guid id, CommentUpdateDto dto)
         {
             var result = await _commentService.UpdateCommentAsync(id, dto);
@@ -71,6 +66,7 @@ namespace JobHandlerAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteComment(Guid id)
         {
             var result = await _commentService.DeleteCommentAsync(id);
@@ -82,3 +78,4 @@ namespace JobHandlerAPI.Controllers
         }
     }
 }
+

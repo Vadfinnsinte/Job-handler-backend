@@ -3,6 +3,7 @@ using JobHandlerAPI.DTOs.Comment;
 using JobHandlerAPI.Helpers;
 using JobHandlerAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace JobHandlerAPI.Services
 {
@@ -32,25 +33,7 @@ namespace JobHandlerAPI.Services
             return Result<List<CommentReadDto>>.Success(result);
         }
 
-        public async Task<Result<CommentReadDto>> GetCommentByIdAsync(Guid id)
-        {
-            var comment = await _context.Comments.FirstOrDefaultAsync(c => c.Id == id);
-
-            if (comment == null)
-                return Result<CommentReadDto>.Failure("Comment not found");
-
-            var result = new CommentReadDto
-            {
-                Id = comment.Id,
-                UserId = comment.UserId,
-                PostId = comment.PostId,
-                Text = comment.Text,
-                CreationDate = comment.CreationDate,
-                UpdatedDate = comment.UpdatedDate
-            };
-
-            return Result<CommentReadDto>.Success(result);
-        }
+        
 
         public async Task<Result<List<CommentReadDto>>> GetCommentsByPostIdAsync(Guid postId)
         {
