@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Text;
 
@@ -128,6 +129,10 @@ namespace JobHandlerAPI.Controllers
             if (existingUsername != null)
                 return Result<ApplicationUser>.Failure("Username already exists");
 
+            if (string.IsNullOrWhiteSpace(dto.Name))
+            {
+                return Result<ApplicationUser>.Failure("Name can not be empty");
+            }
     
             user = new ApplicationUser
             {
