@@ -107,8 +107,17 @@ The purpose of this project is to build a fullstack application with authenticat
 
 ### Authors
 
-This project was created as a group assignment.
+This is a list of the parts we divided and how we distributed them. For more information, please see the commit history.
 
+## Linda
+- created project
+- Services, DTO and controllers for User
+
+## Natalie
+- Services, DTO and controllers for Comment
+
+## Tindra
+- Services, DTO and controllers for Post
 
 ## Data Model
 
