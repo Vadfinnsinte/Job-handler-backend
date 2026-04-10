@@ -34,10 +34,10 @@ namespace JobHandlerAPI.Controllers
         public async Task<IActionResult> Register(RegisterDto dto)
         {
             var userResult = await CreateUser(dto, allowExisting: false);
+
             if (!userResult.IsSuccess)
                 return BadRequest(userResult.Errors);
 
-            // Assign default role
             await _userMgr.AddToRoleAsync(userResult.Data, "User");
 
             return Ok(new { message = "User registered successfully" });
@@ -47,13 +47,20 @@ namespace JobHandlerAPI.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateAdmin(RegisterDto dto)
         {
-            var userResult = await CreateUser(dto, allowExisting: true);
+            var userResult = await CreateUser(dto, allowExisting: false);
             if (!userResult.IsSuccess)
                 return BadRequest(userResult.Errors);
 
             var user = userResult.Data;
 
-  
+            if (string.IsNullOrWhiteSpace(dto.Email) ||
+            string.IsNullOrWhiteSpace(dto.Username) ||
+            string.IsNullOrWhiteSpace(dto.Password) ||
+            string.IsNullOrWhiteSpace(dto.Name))
+            {
+                return BadRequest("All fields are required");
+
+            }
             if (!await _userMgr.IsInRoleAsync(user, "Admin"))
                 await _userMgr.AddToRoleAsync(user, "Admin");
 
