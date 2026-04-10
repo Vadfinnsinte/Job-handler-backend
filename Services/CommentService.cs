@@ -56,6 +56,20 @@ namespace JobHandlerAPI.Services
 
         public async Task<Result<CommentReadDto>> CreateCommentAsync(CommentCreateDto dto)
         {
+            if (string.IsNullOrWhiteSpace(dto.Text))
+                return Result<CommentReadDto>.Failure("Text is required");
+
+            if (dto.Text.Length > 500)
+                return Result<CommentReadDto>.Failure("Text too long");
+
+            var postExists = await _context.Posts.AnyAsync(p => p.Id == dto.PostId);
+            if (!postExists)
+                return Result<CommentReadDto>.Failure("Post not found");
+
+            var userExists = await _context.Users.AnyAsync(u => u.Id == dto.UserId);
+            if (!userExists)
+                return Result<CommentReadDto>.Failure("User not found");
+
             var comment = new Comment
             {
                 Id = Guid.NewGuid(),
@@ -88,6 +102,13 @@ namespace JobHandlerAPI.Services
 
             if (comment == null)
                 return Result<bool>.Failure("Comment not found");
+
+            if (string.IsNullOrWhiteSpace(dto.Text))
+                return Result<bool>.Failure("Text is required");
+
+            if (dto.Text.Length > 500)
+                return Result<bool>.Failure("Text too long");
+
 
             comment.Text = dto.Text;
             comment.UpdatedDate = DateTime.UtcNow;
