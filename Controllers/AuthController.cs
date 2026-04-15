@@ -89,12 +89,13 @@ namespace JobHandlerAPI.Controllers
 
             var creds = new SigningCredentials(
                 key, SecurityAlgorithms.HmacSha256);
+            var duration = int.Parse(_config["JWT:DurationInMinutes"]);
 
             var token = new JwtSecurityToken(
                 issuer: _config["JWT:Issuer"],
                 audience: _config["JWT:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(60),
+                expires: DateTime.UtcNow.AddMinutes(duration),
                 signingCredentials: creds);
 
             return Ok(new
